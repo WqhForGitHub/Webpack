@@ -49,13 +49,17 @@ module.exports = {
     },
   },
   chainWebpack: config => {
+    // 添加一个新的loader
     config.module
-      .rule('my-custom-loader')
-      .test(/\.myext$/) // 匹配文件扩展名
-      .use('my-loader')
-      .loader('path/to/my-loader') // loader 路径
-      .end();
+      .rule('eslint')
+      .use('eslint-loader')
+      .loader('eslint-loader')
+      .tap(options => {
+        options.fix = true; // 自动修复eslint错误
+        return options;
+      });
 
+    // 修改已有的loader
     config.module
       .rule('vue')
       .use('vue-loader')
@@ -63,19 +67,19 @@ module.exports = {
         options.compilerOptions.preserveWhitespace = true; // 保留空格
         return options;
       });
-    
-    const rule = config.module.rule('svg');
-    rule.uses.clear(); // 清除所有已有的 loader
-    rule.use('vue-svg-loader')
-      .loader('vue-svg-loader');
 
-    config.plugin('my-plugin')
-      .use(MyAwesomePlugin, [{ option1: 'value1' }]);
+    // 添加一个新的plugin
+    config.plugin('html')
+      .tap(args => {
+        args[0].title = '我的应用'; // 修改html标题
+        return args;
+      });
 
+    // 别名配置
     config.resolve.alias
-      .set('@', resolve('src')) // 设置 @ 别名
-      .set('components', resolve('src/components')); // 设置 components 别名
+      .set('@', resolve('src'));
 
+    // 优化代码
     config.optimization.splitChunks({
       cacheGroups: {
         vendor: {
@@ -85,6 +89,39 @@ module.exports = {
         },
       },
     });
+
+    // 添加一个新的loader
+    config.module
+      .rule('my-custom-loader')
+      .test(/\.myext$/) // 匹配文件扩展名
+      .use('my-loader')
+      .loader('path/to/my-loader') // loader 路径
+      .end();
+
+     // 添加一个新的loader
+    config.module
+      .rule('vue')
+      .use('vue-loader')
+      .tap(options => {
+        options.compilerOptions.preserveWhitespace = true; // 保留空格
+        return options;
+      });
+
+     // 添加一个新的loader
+    const rule = config.module.rule('svg');
+    rule.uses.clear(); // 清除所有已有的 loader
+    rule.use('vue-svg-loader')
+      .loader('vue-svg-loader');
+
+     // 添加一个新的plugin
+    config.plugin('my-plugin')
+      .use(MyAwesomePlugin, [{ option1: 'value1' }]);
+
+     // 别名配置
+    config.resolve.alias
+      .set('@', resolve('src')) // 设置 @ 别名
+      .set('components', resolve('src/components')); // 设置 components 别名
+
 
     config.devtool('source-map'); // 设置 source-map 模式
     config.mode('production'); // 设置为生产模式 
