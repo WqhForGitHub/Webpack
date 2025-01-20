@@ -49,7 +49,14 @@ module.exports = {
     },
   },
   chainWebpack: config => {
-    // 添加一个新的loader
+     // 添加 Loader
+     config.module
+      .rule('my-custom-loader')
+      .test(/\.myext$/) // 匹配文件扩展名
+      .use('my-loader')
+      .loader('path/to/my-loader') // loader 路径
+      .end();
+
     config.module
       .rule('eslint')
       .use('eslint-loader')
@@ -59,28 +66,50 @@ module.exports = {
         return options;
       });
 
-    // 修改已有的loader
-    config.module
+     // 修改 Loader
+      config.module
       .rule('vue')
       .use('vue-loader')
       .tap(options => {
         options.compilerOptions.preserveWhitespace = true; // 保留空格
         return options;
       });
+     
 
-    // 添加一个新的plugin
-    config.plugin('html')
+     // 替换 Loader
+      const rule = config.module.rule('svg');
+       rule.uses.clear(); // 清除所有已有的 loader
+       rule.use('vue-svg-loader')
+         .loader('vue-svg-loader');
+     
+
+     // 添加 Plugin
+     config.plugin('my-plugin')
+      .use(MyPlugin, [{ option1: 'value1' }]); // MyPlugin 是你自定义的插件
+
+     
+     config.plugin('html')
       .tap(args => {
         args[0].title = '我的应用'; // 修改html标题
         return args;
       });
 
-    // 别名配置
-    config.resolve.alias
-      .set('@', resolve('src'));
+     
+     // 修改 Plugin
+     config.plugin('html')
+      .tap(args => {
+        args[0].title = 'My Awesome App'; // 修改 HTML 标题
+        return args;
+      });
 
-    // 优化代码
-    config.optimization.splitChunks({
+     
+     // 修改别名
+     config.resolve.alias
+      .set('@', path.resolve(__dirname, 'src')); // 设置 @ 别名
+
+     
+     // 代码分割
+     config.optimization.splitChunks({
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
@@ -89,41 +118,5 @@ module.exports = {
         },
       },
     });
-
-    // 添加一个新的loader
-    config.module
-      .rule('my-custom-loader')
-      .test(/\.myext$/) // 匹配文件扩展名
-      .use('my-loader')
-      .loader('path/to/my-loader') // loader 路径
-      .end();
-
-     // 添加一个新的loader
-    config.module
-      .rule('vue')
-      .use('vue-loader')
-      .tap(options => {
-        options.compilerOptions.preserveWhitespace = true; // 保留空格
-        return options;
-      });
-
-     // 添加一个新的loader
-    const rule = config.module.rule('svg');
-    rule.uses.clear(); // 清除所有已有的 loader
-    rule.use('vue-svg-loader')
-      .loader('vue-svg-loader');
-
-     // 添加一个新的plugin
-    config.plugin('my-plugin')
-      .use(MyAwesomePlugin, [{ option1: 'value1' }]);
-
-     // 别名配置
-    config.resolve.alias
-      .set('@', resolve('src')) // 设置 @ 别名
-      .set('components', resolve('src/components')); // 设置 components 别名
-
-
-    config.devtool('source-map'); // 设置 source-map 模式
-    config.mode('production'); // 设置为生产模式 
   },
 };
