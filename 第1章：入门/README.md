@@ -33,8 +33,6 @@ Npm Script 是一个任务执行者。Npm 是在安装 Node.js 时附带的包�
 
 Npm Script 的优点是内置，无须安装其他依赖。其缺点是功能太简单，虽然提供了 pre 和 post 两个钩子，但不能方便地管理多个任务之间的依赖。
 
-<br>
-
 # 3. 安装 Webpack
 
 在用 Webpack 执行构建任务时，需要通过 webpack 可执行文件去启动构建任务，所以需要安装 webpack 可执行文件。在安装 Webpack 前请确保我们的系统安装了 5.0.0 及以上版本的 Node.js。
