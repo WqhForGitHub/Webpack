@@ -33,6 +33,8 @@ Npm Script 是一个任务执行者。Npm 是在安装 Node.js 时附带的包�
 
 Npm Script 的优点是内置，无须安装其他依赖。其缺点是功能太简单，虽然提供了 pre 和 post 两个钩子，但不能方便地管理多个任务之间的依赖。
 
+<br>
+
 # 3. 安装 Webpack
 
 在用 Webpack 执行构建任务时，需要通过 webpack 可执行文件去启动构建任务，所以需要安装 webpack 可执行文件。在安装 Webpack 前请确保我们的系统安装了 5.0.0 及以上版本的 Node.js。
@@ -136,3 +138,78 @@ module.exports = {
     }  
 };
 ```
+
+由于 Webpack 构建运行在 Node.js 环境下，所以该文件最后需要通过 CommonJS 规范导出一个描述如何构建的 Object 对象。
+
+此时，项目目录如下：
+
+|-- index.html
+
+|-- main.js
+
+|-- show.js
+
+|-- webpack.config.js
+
+一切文件就绪，在项目根目录下执行 webpack 命令运行 Webpack 构建，我们会发现目录下多出一个 dist 目录，里面有个 bundle.js 文件，bundle.js 文件是一个可执行的 JavaScript 文件，它包含页面所依赖的两个模块 main.js、show.js，以及内置的 webpackBootstrap 启动函数。这时用浏览器打开 index.html 网页，将会看到 Hello, Webpack。
+
+Webpack 是一个打包模块化 JavaScript 的工具，它会从 main.js 出发，识别出源码中的模块化导入语句，递归地找出入口文件的所有依赖，将入口和其所有依赖打包到一个单独的文件中。从 Webpack 2 版本开始，Webpack 已经内置了对 ES6、CommonJS、AMD 模块化语句的支持。
+
+至此我们已经学会了 Webpack 的基本功能，接下来我们将探索 Webpack 的更多功能。
+
+<br>
+
+# 4. 使用 Loader
+
+在 1.3 节中使用 Webpack 构建了一个采用 CommonJS 规范的模块化项目，本节将继续优化这个网页的 UI，为项目引入 CSS 代码以让文字居中显示，main.css 的内容如下：
+
+```css
+#app {
+    text-align: center;
+}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
