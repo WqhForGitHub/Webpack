@@ -210,11 +210,393 @@ Loader 可以看作具有文件转换功能的翻译员，配置里的 module.ru
 * use 属性的值需要是一个由 Loader 名称组成的数组，Loader 的执行顺序是由后到前的
 * 每个 Loader 都可以通过 URL querystring 的方式传入参数，例如 css-loader?minimize 中的 minimize 告诉 css-loader 要开启 CSS 压缩。
 
+想知道 Loader 具体支持哪些属性，则需要我们查阅文档，例如 css-loader 还有很多用法，我们可以在 css-loader 主页（https://github.com/webpack-contrib/css-loader）上查到。
+
+在重新执行 Webpack 构建前，要先安装引入的 Loader：
+
+```bash
+npm i -D style-loader css-loader
+```
+
+安装成功后重新执行构建时，我们会发现 bundle.js 文件被更新了，里面注入了在 main.css 中写的 CSS 内容，而不会额外生成一个 CSS 文件。但是重新刷新 index.html 网页时，将会发现 "Hello, Webpack" 中了，样式生效了。也许你会对此感到奇怪，第一次看到 CSS 被写在了 JavaScript 里。这其实都是 style-loader 的功劳，它的工作原理大概是将 CSS 的内容用 JavaScript 里的字符串存储起来，在网页执行 JavaScript 时通过 DOM 操作，动态地向 HTML head 标签里插入 HTML style 标签。也许你认为这样做会导致 JavaScript 文件变大并且加载网页的时间变长，想让 Webpack 单独输出 CSS 文件，这时你可以参考 1.5 节，1.5 节将讲解如何通过 Webpack Plugin 机制来实现。
+
+# 5. 使用 Plugin
+
+Plugin 是用来扩展 Webpack 功能的，通过在构建流程里注入钩子实现，它为 Webpack 带来了很大的灵活性。
+
+在 1.4 节中通过 Loader 加载了 CSS 文件，本节通过 Plugin 将注入 bundle.js 文件里的 CSS 提取到单独的文件中，配置修改如下：
+
+```javascript
+const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+module.exports = {
+    // JavaScript 执行入口文件
+    entry: './main.js',
+    output: {
+        // 将所有依赖的模块合并输出到一个 bundle.js 文件中
+        filename: 'bundle.js',
+        // 将输出文件都放到 dist 目录下
+        path: path.resolve(__dirname, './dist')
+    },
+    module: {
+        rules: [
+            {
+                // 用正则去匹配要用该 loader 转换的 CSS 文件
+                test: /\.css$/,
+                loaders: ExtractTextPlugin.extract({
+                    // 转换 .css 文件需要使用的 Loader
+                    use: ['css-loader']
+                })
+            }
+        ]
+    },
+    plugins: [
+        new ExtractTextPlugin({
+            // 从 .js 文件中提取出来的 .css 文件的名称
+            filename: `[name]_[contenthash:8].css`
+        })
+    ]
+}
+```
+
+要让以上代码运行起来，需要先安装新引入的插件：
+
+```bash
+npm i -D extract-text-webpack-plugin
+```
+
+安装成功后重新执行构建，我们会发现 dist 目录下多出一个 main_1a87a56a.css 文件，bundle.js 文件里也没有 CSS 代码了，再将该 CSS 文件引入 index.html 里就完成了。
+
+从以上代码可以看出，Webpack 是通过 plugins 属性来配置需要使用的插件列表的。plugins 属性是一个数组，里面的每一项都是插件的一个实例，在实例化与i个组件时可以通过构造函数传入这个组件支持的配置属性。
+
+例如，ExtractTextPlugin 插件的作用是提取出 JavaScript 代码里的 CSS 到一个单独的文件中。对此我们可以通过插件的 filename 属性，告诉插件输出的 CSS 文件名称是通过 [name]_[contenthash:8].css 字符串模板生成的，里面的 [name] 代表文件的名称，[contenthash:8] 代表根据文件内容算出的 8 位 Hash 值，还有很多配置选项可以在 ExtractTextPlugin 的主页上查到。
+
+# 6. 使用 DevServer
+
+前面几节只是让 Webpack 正常运行起来了，但在实际开发中我们可能会需要：
+
+* 提供 HTTP 服务而不是使用本地文件预览
+* 监听文件的变化并自动刷新网页，做到实时预览
+* 支持 Source Map，以方便调试
+
+对于这些，Webpack 都为我们考虑好了。Webpack 原生支持上述 2、3 点内容，再结合官方提供的开发工具 DevServer（）也可以很方便地做到第 1 点。DevServer 会启动一个 HTTP 服务器用于服务网页请求，同时会帮助启动 Webpack，并接收 Webpack 发出地文件变更信号，通过 WebSocket 协议自动刷新网页做到实时预览。
+
+下面为之前地小项目 Hello, Webpack 继续集成 DevServer。首先需要安装 DevServer：
+
+```bash
+npm i -D webpack-dev-server
+```
+
+安装成功后执行 webpack-dev-server 命令，DevServer 就启动了，这时我们会看到控制台有一串日志输出：
+
+Project is running at http://localhost:8080/
+
+webpack output is served from /
 
 
 
 
 
+
+
+
+
+
+
+# claude
+
+## 1. 安装
+
+### 本地安装（推荐）
+```bash
+npm install --save-dev webpack-dev-server
+```
+
+### 全局安装
+```bash
+npm install -g webpack-dev-server
+```
+
+## 2. 基本配置
+
+### 在 webpack.config.js 中配置
+```javascript:webpack.config.js
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/'
+  },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
+    port: 9000,
+    hot: true,
+    open: true,
+    historyApiFallback: true
+  },
+  mode: 'development'
+};
+```
+
+## 3. 常用配置选项
+
+### 基础配置
+```javascript:webpack.config.js
+devServer: {
+  // 静态文件目录
+  static: {
+    directory: path.join(__dirname, 'public'),
+    publicPath: '/static'
+  },
+  
+  // 端口号
+  port: 3000,
+  
+  // 主机名
+  host: 'localhost',
+  
+  // 自动打开浏览器
+  open: true,
+  
+  // 启用热模块替换
+  hot: true,
+  
+  // 启用 gzip 压缩
+  compress: true,
+  
+  // 支持 HTML5 History API
+  historyApiFallback: true
+}
+```
+
+### 高级配置
+```javascript:webpack.config.js
+devServer: {
+  // 代理配置
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8080',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/api': ''
+      }
+    }
+  },
+  
+  // 允许外部访问
+  allowedHosts: 'all',
+  
+  // 自定义头部
+  headers: {
+    'X-Custom-Header': 'yes'
+  },
+  
+  // 监听文件变化
+  watchFiles: ['src/**/*', 'public/**/*'],
+  
+  // 客户端配置
+  client: {
+    logging: 'info',
+    overlay: {
+      errors: true,
+      warnings: false
+    },
+    progress: true
+  }
+}
+```
+
+## 4. 启动方式
+
+### 通过 npm scripts
+在 package.json 中添加：
+```json:package.json
+{
+  "scripts": {
+    "start": "webpack serve",
+    "dev": "webpack serve --mode development",
+    "serve": "webpack serve --config webpack.dev.js"
+  }
+}
+```
+
+然后运行：
+```bash
+npm start
+```
+
+### 直接命令行
+```bash
+npx webpack serve
+```
+
+### 带参数启动
+```bash
+npx webpack serve --port 8080 --hot --open
+```
+
+## 5. 热模块替换 (HMR)
+
+### 启用 HMR
+```javascript:webpack.config.js
+const webpack = require('webpack');
+
+module.exports = {
+  // ... 其他配置
+  plugins: [
+    new webpack.HotModuleReplacementPlugin()
+  ],
+  devServer: {
+    hot: true
+  }
+};
+```
+
+### 在代码中使用 HMR
+```javascript:src/index.js
+if (module.hot) {
+  module.hot.accept('./module.js', function() {
+    console.log('模块已更新');
+    // 重新执行模块逻辑
+  });
+}
+```
+
+## 6. 代理配置
+
+### 简单代理
+```javascript:webpack.config.js
+devServer: {
+  proxy: {
+    '/api': 'http://localhost:3000'
+  }
+}
+```
+
+### 复杂代理配置
+```javascript:webpack.config.js
+devServer: {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:3000',
+      pathRewrite: { '^/api': '' },
+      changeOrigin: true,
+      secure: false,
+      logLevel: 'debug'
+    },
+    '/auth': {
+      target: 'http://localhost:4000',
+      changeOrigin: true
+    }
+  }
+}
+```
+
+## 7. 常见问题解决
+
+### CORS 问题
+```javascript:webpack.config.js
+devServer: {
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+    'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
+  }
+}
+```
+
+### 网络访问
+```javascript:webpack.config.js
+devServer: {
+  host: '0.0.0.0', // 允许外部访问
+  port: 8080,
+  allowedHosts: 'all'
+}
+```
+
+### 自定义中间件
+```javascript:webpack.config.js
+devServer: {
+  setupMiddlewares: (middlewares, devServer) => {
+    if (!devServer) {
+      throw new Error('webpack-dev-server is not defined');
+    }
+
+    devServer.app.get('/setup-middleware/some/path', (_, response) => {
+      response.send('setup-middlewares option GET');
+    });
+
+    return middlewares;
+  }
+}
+```
+
+## 8. 最佳实践
+
+1. **开发环境专用**：只在开发环境使用 webpack-dev-server
+2. **配置分离**：将开发和生产配置分开
+3. **合理使用 HMR**：对于 React/Vue 等框架，使用专门的 HMR 插件
+4. **代理配置**：合理配置 API 代理，避免跨域问题
+5. **性能优化**：适当配置 watchOptions 和 ignored 选项
+
+## 9. 完整示例
+
+```javascript:webpack.dev.js
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+module.exports = {
+  mode: 'development',
+  entry: './src/index.js',
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist'),
+    clean: true
+  },
+  devtool: 'inline-source-map',
+  devServer: {
+    static: './dist',
+    hot: true,
+    open: true,
+    port: 3000,
+    compress: true,
+    historyApiFallback: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true
+      }
+    }
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'Development',
+      template: './src/index.html'
+    })
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource'
+      }
+    ]
+  }
+};
+```
+
+这样配置后，运行 `npm start` 就可以启动开发服务器，享受热重载和其他开发便利功能了。
+        
 
 
 
