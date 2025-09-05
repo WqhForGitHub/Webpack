@@ -293,6 +293,50 @@ Project is running at http://localhost:8080/
 
 webpack output is served from /
 
+这意味着 DevServer 启动的 HTTP 服务器监听在 8080 端口，DevServer 启动后会一直驻留在后台保持运行，访问这个网址，就能获取项目根目录下的 index.html 了。用浏览器打开这个地址时我们会发现页面空白，错误的原因是 ./dist/bundle.js 加载 404 了。同时我们会发现并没有文件输出到 dist 目录，原因是 DevServer 会将 Webpack 构建出的文件保存在内存中，在要访问输出的文件时，必须通过 HTTP 服务访问。由于 DevServer 不会理会 webpack.config.js 里配置的 output.path 属性，所以要获取 bundle.js 的正确 URL 是 http://localhost:8080/bundle.js，对应的 index.html 应该修改为：
+
+```html
+<html>
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+<div id="app"></div>
+<!-- 导入 DevServer 输出的 JavaScript 文件 -->
+<script src="bundle.js"></script>
+</body>
+</html>
+```
+
+## 1. 实时预览
+
+接着上面的步骤，可以试试修改 main.js、main.css、show.js 中的任意文件，保存后我们会发现浏览器被自动刷新，运行出修改后的效果。
+
+Webpack 在启动时可以开启监听模式，之后 Webpack 会监听本地文件系统的变化，在发生变化时重新构建出新的结果。Webpack 默认关闭监听模式，我们可以在启动 Webpack 时通过 webpack --watch 来开启监听模式。
+
+通过 DevServer 启动的 Webpack 会开启监听模式，当发生变化时重新执行构建，然后通知 DevServer。DevServer 会让 Webpack 在构建出的 JavaScript 代码里注入一个代理客户端用于控制网页，网页和 DevServer 之间通过 Websocket 协议通信，以方便 DevServer 主动向客户端发送命令。DevServer 在收到来自 Webpack 的文件变化通知时，通过注入的客户端控制网页刷新。
+
+如果尝试修改 index.html 文件并保存，则我们会发现这并不会触发以上机制，导致这个问题的原因是 Webpack 在启动时会以配置里的 entry 为入口去递归解析出 entry 所依赖的文件，只有 entry 本身和依赖的文件才会被 Webpack 添加到监听列表里。而 index.html 文件是脱离了 JavaScript 模块化系统的，所以 Webpack 不知道它的存在。
+
+# 7. 核心概念
+
+通过之前几节的学习，相信我们已经对 Webpack 有了一个初步的认识。虽然 Webpack 功能强大且配置项多，但只要理解了其中的几个核心概念，就能随心应手地使用它。Webpack 有以下几个核心概念。
+
+* Entry：入口，Webpack 执行构建地第一步将从 Entry 开始，可抽象成输入。
+* Module：模块，在 Webpack 里一切皆模块，一个模块对应一个文件。Webpack 会从配置的 Entry 开始递归找出所有依赖的模块。
+* Chunk：代码块，一个 Chunk 由多个模块组合而成，用于代码合并与分割。
+* Loader：模块转换器，用于将模块的原内容按照需求转换成新内容。
+* Plugin：扩展插件，在 Webpack 构建流程中的特定时机注入扩展逻辑，来改变构建结果或做我们想要的事情。
+* Output：输出结果，在 Webpack 经过一系列处理并得出最终想要的代码后输出结果。
+
+Webpack 在启动后会从 Entry 里配置的 Module 开始，递归解析 Entry 依赖的所有 Module。每找到一个 Module，就会根据配置的 Loader 去找出对应的转换规则，对 Module 进行转换后，再解析出当前 Module 依赖的 Module。这些模块会以 Entry 为单位进行分组，一个 Entry 及其所有依赖的 Module 被分到一个组也就是一个 Chunk。最后，Webpack 会将所有 Chunk 转换成文件输出。在整个流程中，Webpack 会在恰当的时机执行 Plugin 里定义的逻辑。
+
+在实际应用中我们可能会遇到各种奇怪、复杂的场景，不知道从哪开始。根据以上总结，我们已对 Webpack 有了一个整体认识，这能让我们在以后使用 Webpack 时快速知道应该通过配置什么去完成自己想要的功能，而不是无从下手。
+
+
+
+
+
 
 
 
