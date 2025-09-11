@@ -174,5 +174,356 @@ lib_code
 
 其中，lib_code 是指导出库的代码内容，是有返回值的一个自执行函数。
 
+### 2. commonjs
+
+编写的库将通过 CommonJS 规范导出。
+
+假如配置了 output.library='LibraryName'，则输出和使用的代码如下：
+
+```javascript
+// Webpack 输出的代码
+exports['LibraryName'] = lib_code;
+// 使用库的方法
+require('library-name-in-npm')['LibraryName'].doSomething();
+```
+
+其中，library-name-in-npm 是指模块被发布到 npm 代码仓库时的名称。
+
+### 3. commonjs2
+
+编写的库将通过 CommonJS2 规范导出，输出和使用的代码如下：
+
+```javascript
+// Webpack 输出的代码
+module.exports = lib_code;
+// 使用库的方法
+require('library-name-in-npm').doSomething();
+```
+
+CommonJS2 和 CommonJS 规范相似，差别在于 CommonJS 只能用 exports 导出，而 CommonJS2 在 CommonJS 的基础上增加了 module.exports 的导出方式。
+
+在 output.libraryTarget 为 commonjs2 时，配置 output.library 将没有意义。
+
+### 4. this
+
+编写的库将通过 this 被赋值给通过 library 指定的名称，输出和使用的代码如下：
+
+```javascript
+// Webpack 输出的代码
+this['LibraryName'] = lib_code;
+// 使用库的方法
+this.LibraryName.doSomething();
+```
+
+### 5. window
+
+编写的库将通过 window 赋值给通过 library 指定的名称，输出和使用的代码如下：
+
+```javascript
+// Webpack 输出的代码
+window['LibraryName'] = lib_code;
+// 使用库的方法
+window.LibraryName.doSomething();
+```
+
+### 6. global
+
+编写的库将通过 global 赋值给通过 library 指定的名称，即把库挂载到 global 上，输出和使用的代码如下：
+
+```javascript
+// Webpack 输出的代码
+global['LibraryName'] = lib_code;
+// 使用库的方法
+global.LibraryName.doSomething();
+```
+
+## 7. libraryExport
+
+output.libraryExport 配置要导出的模块中哪些子模块需要被导出。它只有在 output.libraryTarget 被设置成 commonjs 或者 commonjs2 时使用才有意义。
+
+假如要导出的模块源代码是：
+
+```javascript
+export const a = 1;
+export default b = 2;
+```
+
+而现在想让构建输出的代码只导出其中的 a，则可以将 output.libraryExport 设置成 a，那么构建输出的代码和使用方法将变成如下内容：
+
+```javascript
+// Webpack 输出的代码
+module.exports = lib_code['a'];
+// 使用库的方法
+require('library-name-in-npm')===1;
+```
+
+以上只是 output 中的常用配置项，还有部分几乎用不上的配置项没有在这里一一列举，可以在 Webpack 官方文档上查阅它们。
+
+# 3. Module
+
+module 配置处理模块的规则，下面对它进行详细讲解。
+
+## 1. 配置 Loader
+
+rules 配置模块的读取和解析规则，通常用来配置 Loader。其类型是一个数组，数组里的每一项都描述了如何处理部分文件。配置一项 rules 时大致可通过以下方式来完成。
+
+* 条件匹配：通过 test、include、exclude 三个配置项来选中 Loader 要应用规则的文件。
+* 应用规则：对选中的文件通过 use 配置项来应用 Loader，可以只应用一个 Loader 或者按照从后往前的顺序应用一组 Loader，同时可以分别向 Loader 传入参数。
+* 重置顺序：一组 Loader 的执行顺序默认是从右到左执行的，通过 enforce 选项可以将其中一个 Loader 的执行顺序放到最前或者最后。
+
+下面通过一个例子来说明具体的使用方法：
+
+```javascript
+module: {
+    rules: [
+        {
+            // 命中 JavaScript 文件
+            test: /\.js$/,
+            // 用 babel-loader 转换 JavaScript 文件
+            // ?cacheDirectory 表示传给 babel-loader 的参数，用于缓存 babel 的编译结果，加快重新编译的速度
+            use: ['babel-loader?cacheDirectory'],
+            // 只命中 src 目录里的 JavaScript 文件，加快 Webpack 的搜索速度
+            include: path.resolve(__dirname, 'src')
+        },
+        {
+            // 命中 SCSS 文件
+            test: /\.scss$/,
+            // 使用一组 Loader 去处理 SCSS 文件
+            // 处理顺序为从后到前，即先交给 sass-loader 处理，再将结果交给 css-loader，最后交给 style-loader
+            use: ['style-loader', 'css-loader', 'sass-loader'],
+            // 排除 node_modules 目录下的文件
+            exclude: path.resolve(__dirname, 'node_modules')
+        },
+        {
+            // 对非文本文件采用 file-loader 加载
+            test: /\.(gif|png|jpe?g|eot|woff|ttf|svg|pdf)$/,
+            use: ['file-loader']
+        }
+    ]
+}
+```
+
+在 Loader 需要传入很多参数时，我们还可以通过一个 Object 来描述，例如在上面的 babel-loader 配置中有如下代码：
+
+```javascript
+use: [
+    {
+        loader: 'babel-loader',
+        options: {
+            cacheDirectory: true
+        },
+        // enforce: 'post' 的含义是将该 Loader 的执行顺序放到最后
+        // enforce 的值还可以是 pre，代表将 Loader 的执行顺序放到最前面
+        enforce: 'post'
+    },
+    // 省略其他 Loader
+]
+```
+
+在上面的例子中，test、include、exclude 这三个命令文件的配置项只传入了一个字符串或正则，其实它们也支持数组类型，使用如下：
+
+```javascript
+{
+    test: [
+        /\.jsx?$/,
+        /\.tsx?$/
+    ],
+    include: [
+        path.resolve(__dirname, 'src'),
+        path.resolve(__dirname, 'tests')
+    ],
+    exclude: [
+        path.resolve(__dirname, 'node_modules'),
+        path.resolve(__dirname, 'bower_modules')
+    ]
+}
+```
+
+数组里的每项之间是或的关系，即文件的路径只要满足数组中的任何一个条件，就会被命中。
+
+## 2. noParse
+
+noParse 配置项可以让 Webpack 忽略对部分没采用模块化的文件的递归解析和处理，这样做的好处是能提高构建性能。原因是一些库如 jQuery、ChartJS 庞大又没有采用模块化标准，让 Webpack 去解析这些文件既耗时又没有意义。
+
+noParse 是可选的配置项，类型需要是 RegExp、[RegExp]、function 中的一种。
+
+例如，若想要忽略 jQuery、ChartJS，则可以使用如下代码：
+
+```javascript
+// 使用正则表达式
+noParse: /jquery|chartjs/
+// 使用函数，从 Webpack 3.0.0 开始支持
+noParse: (content) => {
+    // content 代表一个模块的文件路径
+    // 返回 true 或 false
+    return /jquery|chartjs/.test(content);
+}
+```
+
+注意，被忽略的文件里不应该包含 import、require、define 等模块化语句，不然会导致在构建出的代码中包含无法在浏览器环境下执行的模块化语句。
+
+## 3. parser
+
+因为 Webpack 是以模块化的 JavaScript 文件为入口的，所以内置了对模块化 JavaScript 的解析功能，支持 AMD、CommonJS、SystemJS、ES6。parser 属性可以更细粒度地配置哪些模块语法被解析、哪些不被解析。同 noParse 配置项地区别在于，parser 可以精确到语法层面，而 noParse 只能控制哪些文件不被解析。parser 地使用方法如下：
+
+```javascript
+module: {
+    rules: [
+        {
+            test: /\.js$/,
+            use: ['babel-loader'],
+            parser: {
+                amd: false, // 禁用 AMD
+                commonjs: false, // 禁用 CommonJS
+                system: false, // 禁用 SystemJS
+                harmony: false. // 禁用 ES6 import/export
+                requireInclude: false, // 禁用 require.include
+                requireEnsure: false, // 禁用 require.ensure
+                requireContext: false, // 禁用 require.context
+                browserify: false, // 禁用 browserify
+                requireJs: false // 禁用 requirejs  
+            }
+        }
+    ]
+}
+```
+
+# 4. Resolve
+
+Webpack 在启动后会从配置的入口模块出发找出所有依赖的模块，Resolve 配置 Webpack 如何寻找模块所对应的文件。Webpack 内置 JavaScript 模块化语法解析功能，默认会采用模块化标准里约定的规则去寻找，但我们也可以根据自己的需要修改默认的规则。
+
+## 1. alias
+
+resolve.alias 配置项通过别名来将原导入路径映射成一个新的导入路径。例如使用以下配置：
+
+```javascript
+// Webpack alias 配置
+resolve: {
+    alias: {
+        components: './src/components/'
+    }
+}
+```
+
+当通过 import Button from 'components/button' 导入时，实际上被 alias 等价替换成了 import Button from './src/components/button'。
+
+以上 alias 配置的含义是，将导入语句里的 components 关键字替换成 ./src/components/。
+
+这样做可能会命中太多导入语句，alias 还支持通过 $ 符号来缩小范围到只命中以关键字结尾的导入语句：
+
+```javascript
+resolve: {
+    alias: {
+        'react$': '/path/to/react.min.js'
+    }
+}
+```
+
+react$ 只会命中以 react 结尾的导入语句，即只会将 import 'react' 关键字替换成 import '/path/tp/react/min.js'。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
