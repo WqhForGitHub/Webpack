@@ -1,4 +1,4 @@
-# 1. Entry
+# u1. Entry
 
 entry 是配置模块的入口，可抽象成输入，Webpack 执行构建的第一步将从入口开始，搜寻递归解析出所有入口依赖的模块。
 
@@ -505,6 +505,460 @@ module.exports = {
 使用 Plugin 的难点在于掌握 Plugin 本身提供的配置项，而不是如何在 Webpack 中接入 Plugin。
 
 几乎所有 Webpack 无法直接实现的功能都能在社区找到开源的 Plugin 去解决，我们需要善于使用搜索引擎寻找解决问题的方法。
+
+# 6. DevServer
+
+在 1.6 节介绍过用来提高开发效率的 DevServer，它提供的一些配置项可以用于改变 DevServer 的默认行为。要配置 DevServer，除了可以在配置文件里通过 devServer 传入参数，还可以通过命令行参数传入。注意，只有在通过 DevServer 启动 Webpack 时，配置文件里的 devServer 才会生效，因为这些参数所对应的功能都是 DevServer 提供的，Webpack 本身并不认识 devServer 配置项。
+
+## 1. hot
+
+devServer.hot 配置是否启用 1.6 节提到的模块热替换功能。DevServer 的默认行为是在发现源代码被更新后通过自动刷新整个页面来做到实时预览，开启模块热替换功能后，将在不刷新整个页面的情况下通过用新模块替换老模块来做到实时预览。
+
+## 2. inline
+
+DevServer 的实时预览功能依赖一个注入页面里的代理客户端，去接收来自 DevServer 的命令并负责刷新网页的工作。devServer.inline 用于配置是否将这个代理客户端自动注入将运行在页面中的 Chunk 里，默认自动注入。DevServer 会根据我们是否开启 inline 来调整它的自动刷新策略。
+
+* 如果开启 inline，则 DevServer 会在构建变化后的代码时通过代理客户端控制网页刷新。
+* 如果关闭 inline，则 DevServer 将无法直接控制要开发的网页。这时它会通过 iframe 的方式去运行要开发的网页。在构建完变化后的代码时，会通过刷新 iframe 来实时预览，但这时我们需要去 http://localhost:8080/webpack-dev-server/ 实时预览自己的网页。
+
+如果你想使用 DevServer 自动刷新网页实现实时预览，则最方便的方法是直接开启 inline。
+
+## 3. historyApiFallback
+
+devServer.historyApiFallback 用于方便地开发使用了 HTML5 History API 的单页应用。这类单页应用要求服务器在针对任何命中的路由时，都返回一个对应的 HTML 文件。例如在访问 http://locahost/user 和 http://localhost/home 时都返回 index.html 文件，浏览器端的 JavaScript 代码会从 URL 里解析出当前页面的状态，显示对应的界面。
+
+配置 historyApiFallback 的简单做法是：
+
+```javascript
+historyApiFallback: true
+```
+
+这会导致任何请求都会返回 index.html 文件，这只能用于只有一个 HTML 文件的应用。
+
+如果我们的应用由多个单页应用组成，则需要 DevServer 根据不同的请求返回不同的 HTML 文件，配置如下：
+
+```javascript
+historyApiFallback: {
+    // 使用正则匹配命中路由
+    rewrites: [
+        // /user 开头的都返回 user.html
+        { from: /^\/user/, to: '/user.html' },
+        { from: /^\/game/, to: '/game.html' },
+        // 其他的都返回 index.html
+        { from: /./, to: '/index.html' }
+    ]
+}
+```
+
+## 4. contentBase
+
+devServer.contentBase 配置 DevServer HTTP 服务器的文件根目录。在默认情况下为当前的执行目录，通常是项目根目录，所以在一般情况下不必设置它，除非有额外的文件需要被 DevServer 服务。例如，若想将项目根目录下的 public 目录设置成 DevServer 服务器的文件根目录，则可以这样配置：
+
+```javascript
+devServer: {
+    contentBase: path.join(__dirname, 'public')j
+}
+```
+
+这里解释一下可能会让我们感到疑惑的地方。DevServer 服务器通过 HTTP 服务暴露文件的方式可分为两类：
+
+* 暴露本地文件
+* 暴漏 Webpack 构建出的结果，由于构建出的结果交给了 DevServer，所以我们在使用 DevServer 时，会在本地找不到构建出的文件。
+
+contentBase 只能用来配置暴露本地文件的规则，可以通过 contentBase: false 来关闭暴露本地文件。
+
+## 5. headers
+
+devServer.headers 配置项可以在 HTTP 响应中注入一些 HTTP 响应头，使用如下：
+
+```javascript
+devServer: {
+    headers: {
+        'X-foo': 'bar'
+    }
+}
+```
+
+## 6. host
+
+devServer.host 配置项用于配置 DevServer 服务监听的地址。例如，若想让局域网中的其他设备访问自己的本地服务，则可以在启动 DevServer 时带上 --host 0.0.0.0。host 的默认值是 127.0.0.1，即只有本地可以访问 DevServer 的 HTTP 服务。
+
+## 7. port
+
+devServer.host 配置项用于配置 DevServer 服务监听的端口，默认使用 8080 端口。如果 8080 端口已经被其他程序占用，就使用 8081。如果 8081 还是被占用，则使用 8082，以此类推。
+
+## 8. allowedHosts
+
+devServer.allowedHosts 配置一个白名单列表，只有 HTTP 请求的 HOST 在列表里才正常返回，使用如下：
+
+```javascript
+allowedHosts: [
+    // 匹配单个域名
+    'host.com',
+    'sub.host.com',
+    // host2.com 和所有的子域名 *.host2.com 都将匹配
+    '.host2.com'
+]
+```
+
+## 9. disableHostCheck
+
+devServer.disableHostCheck 配置项用于配置是否关闭用于 DNS 重新绑定的 HTTP 请求的 HOST 检查。DevServer 默认只接收来自本地的请求，关闭后可以接收来自任意 HOST 的请求。它通常用于搭配 --host 0.0.0.0 使用，因为想让其他设备访问自己的本地服务，但访问时是直接通过 IP 地址访问而不是通过 HOST 访问，所以需要关闭 HOST 检查。
+
+## 10. https
+
+DevServer 默认使用 HTTP 服务，它也能使用 HTTPS 服务。在某些情况下我们必须使用 HTTPS，例如 HTTP2 和 Service Worker 就必须运行在 HTTPS 上。要切换成 HTTPS 服务，最简单的方式是：
+
+```javascript
+devServer: {
+    https: true
+}
+```
+
+DevServer 会自动为我们生成一份 HTTPS 证书。
+
+如果我们想用自己的证书，则可以这样配置：
+
+```javascript
+devServer: {
+    https: {
+        key: fs.readFileSync('path/to/server.key'),
+        cert: fs.readFileSync('path/to/server/crt'),
+        ca: fs.readFileSync('path/to/ca.pem')
+    }
+}
+```
+
+## 11. clientLogLevel
+
+devServer.clientLogLevel 配置客户端的日志等级，这会影响到我们在浏览器开发者工具控制台里看到的日志内容。clientLogLevel 是枚举类型，可取如下值之一：none、error、warning、info。默认为 info 级别，即输出所有类型的日志，设置成 none 时可以不输出任何日志。
+
+## 12. compress
+
+devServer.compress 配置是否启用 Gzip 压缩，为 boolean 类型，默认为 false。
+
+## 13. open
+
+devServer.open 用于在 DevServer 启动且第一次构建完时，自动用我们的系统的默认浏览器去打开要开发的网页。还提供了 devServer.openPage 配置项来打开指定 URL 的网页。
+
+# 7. 其他配置项
+
+除了前面介绍到的配置项，Webpack 还提供了一些零散的配置项。下面介绍这些配置项中的常用部分。
+
+## 1. Target
+
+JavaScript 的应用场景越来越多，从浏览器到 Node.js，这些运行子啊不同环境下中的 JavaScript 代码存在一些差异。target 配置项可以让 Webpack 构建出针对不同运行环境的代码。target 可以是如下表所示的值之一。
+
+| target 值         | 描述                                           |
+| ----------------- | ---------------------------------------------- |
+| web               | 针对浏览器（默认），所有代码都集中在一个文件里 |
+| node              | 针对 Node.js，使用 require 语句加载 Chunk 代码 |
+| async-node        | 针对 Node.js，异步加载 Chunk 代码              |
+| webworker         | 针对 WebWorker                                 |
+| electron-main     | 针对 Electron 主线程                           |
+| electron-renderer | 针对 Electron 渲染线程                         |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
