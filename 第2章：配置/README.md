@@ -1,4 +1,4 @@
-# u1. Entry
+# 1. Entry
 
 entry 是配置模块的入口，可抽象成输入，Webpack 执行构建的第一步将从入口开始，搜寻递归解析出所有入口依赖的模块。
 
@@ -657,6 +657,196 @@ JavaScript 的应用场景越来越多，从浏览器到 Node.js，这些运行�
 | webworker         | 针对 WebWorker                                 |
 | electron-main     | 针对 Electron 主线程                           |
 | electron-renderer | 针对 Electron 渲染线程                         |
+
+例如，在设置 target: 'node' 时，在源代码中导入 Node.js 原生模块的语句 require('fs') 将会被保留，fs 模块的内容不会被打包到 Chunk 里。
+
+## 2. Devtool
+
+devtool 配置 Webpack 如何生成 Source Map，默认值是 false，即不生成 Source Map，若想为构建出的代码生成 Source Map 以方便调试，则可以这样配置：
+
+```javascript
+module.exports = {
+    devtool: 'source-map'
+}
+```
+
+## 3. Watch 和 WatchOptions
+
+前面介绍过 Webpack 的监听模式，它支持监听文件更新，在文件发生变化时重新编译。在使用 Webpack 时，监听模式默认是关闭的，若想打开，则需要如下配置：
+
+```javascript
+module.exports = {
+    watch: true
+}
+```
+
+在使用 DevServer 时，监听模式默认是开启的。
+
+除此之外，Webpack 还提供了 watchOptions 配置项去更灵活地控制监听模式，使用如下：
+
+```javascript
+module.exports = {
+    // 只有在开启监听模式时，watchOptions 才有意义
+    // 默认为 false，也就是不开启
+    watch: true,
+    // 监听模式运行时的参数
+    // 在开启监听模式下，才有意义
+    watchOptions: {
+        // 不监听的文件或文件夹，支持正则匹配
+        // 默认为空
+        ignored: /node_modules/,
+        // 监听到变化后会等 300ms 再去执行动作，防止文件更新太快导致重新编译频率太高
+        // 默认为 300ms
+        aggregateTimeout: 300,
+        // 判断文件是否发生变化是通过不停地询问系统指定文件有没有变化实现的
+        // 默认每秒询问 1000 次
+        poll: 1000
+    }
+}
+```
+
+## 4. Externals
+
+Externals 用来告诉在 Webpack 要构建的代码中使用了哪些不用被打包的模块，也就是说这些模板是外部提供的，Webpack 在打包时可以忽略它们。
+
+有些 JavaScript 运行环境可能内置了一些全局变量或者模块，例如在我们的 HTML HEAD 标签里通过以下代码引入 jQuery：
+
+```html
+<script src="path/to/jquery.js"></script>
+```
+
+这时，全局变量 jQuery 就会被注入网页的 JavaScript 运行环境里。
+
+如果想在使用模块化的源代码里导入和使用 jQuery，则可能需要这样：
+
+```javascript
+import $ from 'jquery';
+$('.my-element');
+```
+
+构建后我们会发现输出的 Chunk 里包含的 jQuery 库的内容，这导致 jQuery 库出现了两次，浪费加载流量，最好是 Chunk 里不会包含 jQuery 库的内容。
+
+Externals 配置项就是用于解决这个问题的。
+
+通过 externals 可以告诉 Webpack 在 JavaScript 运行环境中已经内置了哪些全局变量，不用将这些全局变量打包到代码中而是直接使用它们。要解决以上问题，可以这样配置 externals：
+
+```javascript
+module.exports = {
+    externals: {
+        // 将导入语句里的 jquery 替换成运行环境里的全局变量 jQuery
+        jquery: 'jQuery'
+    }
+}
+```
+
+## 5. ResolveLoader
+
+ResolveLoader 用来告诉 Webpack 如何去寻找 Loader，因为在使用 Loader 时是通过其包名称去引用的，Webpack 需要根据配置的 Loader 包名去找到 Loader 的实际代码，以调用 Loader 去处理源文件。
+
+ResolveLoader 的默认配置如下：
+
+```javascript
+module.exports = {
+    resolveLoader: {
+        // 去哪个目录下寻找 Loader
+        modules: ['node_modules'],
+        // 入口文件的后缀
+        extensions: ['.js', '.json'],
+        // 指名入口文件位置的字段
+        mainFields: ['loader', 'main']
+    }
+}
+```
+
+该配置项常用于加载本地的 Loader。
+
+# 9. 多种配置类型
+
+除了通过导出一个 Object 来描述 Webpack 所需的配置，还有其他更灵活的方式，以简化不同场景的配置。下面来一一介绍它们。
+
+## 1. 导出一个 Function
+
+在大多数时候，我们需要从同一份源代码中构建出多份代码，例如一份用于开发，一份用于发布到线上。
+
+如果采用导出一个 Object 来描述 Webpack 所需的配置的方法，则需要写两个文件，一个用于开发环境，一个用于线上环境。再在启动时通过 webpack --config webpack.config.js 指定使用哪个配置文件。
+
+采用导出一个 Function 的方式，能通过 JavaScript 灵活地控制配置，做到只用写一个配置文件就能完成以上要求。
+
+导出一个 Function 的使用方式如下：
+
+```javascript
+const path = require('path');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+module.exports = function (env = {}, argv) {
+    const plugins = [];
+    const isProduction = env['production'];
+    
+    // 在生成环境中才压缩
+    if (isProduction) {
+        plugins.push(
+            // 压缩输出的 JavaScript 代码
+            new UglifyJsPlugin()
+        )
+    }
+    
+    return {
+        plugins: plugins,
+        devtool: isProduction ? undefined : 'source-map';
+    }
+}
+```
+
+在运行 Webpack 时，会向这个函数传入两个参数，如下所述。
+
+* env：当前运行时的 Webpack 专属环境变量，env 是一个 Object。读取时直接访问 Object 的属性，将它设置为需要在启动 Webpack 时带上参数。例如启动命令似乎 webpack --env.production --env.bao-foo，则 env 的值是 {"production": "true", "bao": "foo"}。
+* argv：代表在启动 Webpack 时通过命令行传入的所有参数，例如 --config、--env、--devtool，可以通过 webpack -h 列出所有 Webpack 支持的命令行参数。
+
+就以上配置文件而言，在开发时执行命令 webpack 构建出方便调试的代码，在需要构建出发布到线上的代码时执行 webpack --env.production 构建出压缩的代码。
+
+## 2. 导出一个返回 Promise 的函数
+
+在某些情况下不能以同步的方式返回一个描述配置的 Object，Webpack 还支持导出一个返回 Promise 的函数，使用如下：
+
+```javascript
+module.exports = function(env = {}, argv) {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve({});
+        }, 5000)
+    })
+}
+```
+
+## 3. 导出多份配置
+
+除了只导出一份配置，Webpack 还支持导出一个数组，数组中可以包含每份配置，并且每份配置都会执行一遍构建。
+
+注意，Webpack 从 3.1.0 版本才开始支持该特性。
+
+使用如下：
+
+```javascript
+module.exports = {
+    // 采用 Object 描述的一份配置
+    {
+    	// ...
+	},
+    // 采用函数描述的一份配置
+    function() {
+    	return {
+            // ...
+        }
+	},
+    // 采用异步函数描述的一份配置
+    function() {
+		return Promise();
+	}
+}
+```
+
+以上配置会导致 Webpack 针对这三份配置执行三次不同的构建。
+
+这特别适合用 Webpack 构建一个要上传到 Npm 仓库的库，因为库中可能需要包含多种模块化格式的代码，例如 CommonJS、UMD。
 
 
 
