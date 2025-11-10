@@ -7,7 +7,7 @@ ECMAScript 6.0 是 2015 年发布的下一代 JavaScript 语言标准，它引�
 - 将新的 ES6 语法用 ES5 实现，例如 ES6 的 class 语法用 ES5 的 prototype 实现；
 - 为新的 API 注入 polyfill，例如使用新的 fetch API 时在注入对应的 polyfill 后才能让低端浏览器正常运行。
 
-## 3.1.1 认识 Babel
+## 1. 认识 Babel
 
 Babel ([https://babeljs.io](https://babeljs.io/)) 可以方便地完成以上两件事。Babel 是一个 JavaScript 编译器，能将 ES6 代码转为 ES5 代码，让我们使用最新的语言特性而不用担心兼容性问题，并且可以通过插件机制根据需求灵活地扩展。在 Babel 执行编译的过程中，会从项目根目录下的 .babelrc 文件中读取配置。.babelrc 是一个 JSON 格式的文件，内容大致如下：
 
@@ -101,7 +101,7 @@ presets 属性告诉 Babel 要转换的源码使用了哪些新的语法特性�
 
 在实际应用中，我们需要根据项目源码所使用的语法去安装对应的 Plugins 或 Presets。
 
-## 3.1.2 接入 Babel
+## 2. 接入 Babel
 
 在了解 Babel 后，下一步就需要知道如何在 Webpack 中使用它。由于 Babel 所做的事情是转换代码，所以应该通过 Loader 去接入 Babel。Webpack 的配置如下：
 
@@ -129,15 +129,11 @@ npm i -D babel-core babel-loader
 npm i -D babel-preset-env
 ```
 
-本实例提供项目的完整代码，参见 http://webpack.wuhaolin.cn/3-1 使用 ES6 语言.zip。哦，
-
-
-
-
+本实例提供项目的完整代码，参见 http://webpack.wuhaolin.cn/3-1 使用 ES6 语言.zip。
 
 # 3.2 使用 TypeScript 语言
 
-## 3.2.1 认识 TypeScript
+## 1. 认识 TypeScript
 
 TypeScript ([http://www.typescriptlang.org](http://www.typescriptlang.org/)) 是 JavaScript 的一个超集，主要提供了类型检查系统和对 ES6 语法的支持，但不支持新的 API。目前没有任何环境支持运行原生的TypeScript 代码，必须通过构建将它转换成 JavaScript 代码后才能运行。
 
@@ -176,7 +172,7 @@ TypeScript 官方提供了能将 TypeScript 转换成 JavaScript 的编译器。
 
 通过 `npm install -g typescript` 安装编译器到全局后，可以通过 `tsc hello.ts` 命令编译出 `hello.js` 和 `hello.js.map` 文件。
 
-## 3.2.2 减少代码冗余
+## 2. 减少代码冗余
 
 TypeScript 编译器会有与 3.1 节中 Babel 同样的问题：在将 ES6 语法转换成 ES5 语法时需要注入辅助函数。为了不让同样的辅助函数重复出现在多个文件中，可以开启 TypeScript 编译器的 `importHelpers` 选项，需要修改 `tsconfig.json` 文件如下：
 
@@ -197,7 +193,7 @@ _tslib._extend(target);
 
 这会导致编译出的代码依赖 `tslib` 这个迷你库，但避免了代码冗余。
 
-## 3.2.3 集成 Webpack
+## 3. 集成 Webpack
 
 要让 Webpack 支持 TypeScript，需要解决以下两个问题。
 
@@ -245,7 +241,7 @@ npm i -D typescript awesome-typescript-loader
 
 # 3.3 使用 Flow 检查器
 
-## 3.3.1 认识 Flow
+## 1. 认识 Flow
 
 Flow ([https://flow.org](https://flow.org/)) 是 Facebook 开源的一个 JavaScript 静态类型检测器，它是 JavaScript 语言的超集。我们所需要做的就是在需要的地方加上类型检查，例如在两个由不同的人开发的模块对接的接口处加上静态类型检查，就能在编译阶段指出部分模块使用不当的问题。同时，Flow 能通过类型推断检查出在 JavaScript 代码中潜在的 Bug。
 
@@ -267,7 +263,7 @@ square2('2');
 
 需要注意的是，该段代码的第 1 行 `// @flow` 告诉 Flow 检查器这个文件需要被检查。
 
-## 3.3.2 使用 Flow
+## 2. 使用 Flow
 
 以上只是让我们了解 Flow 的功能，下面讲解如何运行 Flow 来检查代码。Flow 检测器由高性能且跨平台的 OCaml ([http://ocaml.org](http://ocaml.org/)) 语言编写，它的可执行文件可以通过 `npm i -D flow-bin` 安装，安装完成后可先配置 Npm Script：
 
@@ -304,7 +300,7 @@ function foo(one, two, three) {}
 * flow-remove-types（https://github.com/flowtype/flow-remove-types）：可单独使用，速度快。
 * babel-preset-flow（https://babeljs.io/docs/plugins/preset-flow/）：与 Babel 集成。
 
-## 3.3.3 集成 Webpack
+## 3. 集成 Webpack
 
 由于使用了 Flow 的项目一般都会使用 ES6 语法，所以将 Flow 集成到使用 Webpack 构建的项目里的最方便方法是借助 Babel。下面修改 3.1 节中的代码，为其加入 Flow 代码检查，改动如下。
 
@@ -327,7 +323,7 @@ function foo(one, two, three) {}
 
 # 3.4 使用 SCSS 语言
 
-## 3.4.1 认识 SCSS
+## 1. 认识 SCSS
 
 SCSS ([http://sass-lang.com](http://sass-lang.com/)) 可以让我们用更灵活的方式写 CSS。它是一种 CSS 预处理器，语法和 CSS 相似，但加入了变量、逻辑等编程元素，代码类似这样：
 
@@ -359,7 +355,7 @@ node-sass main.scss main.css
 
 就能在源码同目录下看到编译后的 `main.css` 文件。
 
-## 3.4.2 接入 Webpack
+## 2. 接入 Webpack
 
 我们曾在 1.4 节介绍过将 SCSS 源代码转换成 CSS 代码的最佳方式是使用 Loader，Webpack 官方提供了对应的 `sass-loader` (https://github.com/webpack-contrib/sass-loader)。
 
@@ -399,7 +395,7 @@ npm i -D node-sass
 
 # 3.5 使用 PostCSS
 
-## 3.5.1 认识 PostCSS
+## 1. 认识 PostCSS
 
 PostCSS ([http://postcss.org](http://postcss.org/)) 是一个 CSS 处理工具，和 SCSS 的不同之处在于它可以通过插件机制灵活地扩展其支持的特性，而不像 SCSS 那样语法是固定的。PostCSS 的用处非常多，包括向 CSS 自动加前缀、使用下一代 CSS 语法等。目前越来越多的人开始使用它，它很可能会成为 CSS 预处理器的最终赢家。
 
@@ -456,7 +452,7 @@ module.exports = {
 
 目前 Chrome 等现代浏览器已经能完全支持 cssnext 中的所有语法，也就是说按照 cssnext 语法写的 CSS 在不经过转换的情况下也能在浏览器中直接运行。
 
-## 3.5.2 接入 Webpack
+## 2. 接入 Webpack
 
 虽然使用 PostCSS 后，文件的后缀还是 `.css`，但必须将这些文件先交给 `postcss-loader` (https://github.com/postcss/postcss-loader) 处理一遍后再交给 `css-loader`。
 
@@ -489,7 +485,7 @@ npm i -D postcss-cssnext
 
 # 3.6 使用 React 框架
 
-## 3.6.1 React 的语法特征
+## 1. React 的语法特征
 
 在使用了 React 项目的代码中有 JSX 和 Class 语法，例如：
 
@@ -514,7 +510,7 @@ return React.createElement('h1', null, 'Hello, Webpack')
 
 目前 Babel 和 TypeScript 都提供了对 React 语法的支持，下面分别介绍如何在使用 Babel 或 TypeScript 的项目中接入 React 框架。目前 Babel 和 TypeScript 都提供了对 React 语法的支持，下面分别介绍如何在使用 Babel 或 TypeScript 的项目中接入 React 框架。
 
-## 3.6.2 React 与 Babel
+## 2. React 与 Babel
 
 在使用 Babel 的项目中接入 React 框架很简单，只需要加入 React 所依赖的 Presets `babel-preset-react` (https://babeljs.io/docs/plugins/preset-react/)。接下来通过修改 3.1 节中的项目，为其接入 React 框架。
 
@@ -557,7 +553,7 @@ render(<Button/>, window.document.getElementById('app'));
 
 本实例提供项目的完整代码，参见 http://webpack.wuhaolin.cn/3-6 使用 React 框架 Babel.zip。
 
-## 3.6.3 React 与 TypeScript
+## 3. React 与 TypeScript
 
 与 Babel 相比，TypeScript 的优点在于，它原生支持 JSX 语法，不需要重新安装新的依赖，只需修改一行配置。但 TypeScript 的不同之处在于：
 
@@ -614,7 +610,7 @@ npm i react react-dom @types/react @types/react-dom
 
 Vue ([https://cn.vuejs.org](https://cn.vuejs.org/)) 是一个渐进式的 MVVM 框架，比 React、Angular 更灵活、轻量。它不会强制性地内置一些功能和语法，我们可以根据自己的需要一点点地增加功能。虽然采用 Vue 的项目能用可直接运行在浏览器环境里的代码编写，但为了方便编写，大多数项目都会采用 Vue 官方的单文件组件 (https://cn.vuejs.org/v2/guide/single-file-components.html#介绍) 的写法去编写项目。由于直接引用 Vue 是很成熟的做法，所以本书只专注于讲解如何用 Webpack 构建 Vue 单文件组件。
 
-## 3.7.1 认识 Vue
+## 1. 认识 Vue
 
 Vue 和 React 一样，都推崇组件化和由数据驱动视图的思想，将视图和数据绑定在一起，这样数据改变时，视图会跟着改变，而无需直接操作视图。还是以前面的 Hello, Webpack 为例，来看看 Vue 版本的实现。
 
@@ -659,7 +655,7 @@ new Vue({
 
 入口文件创建 Vue 的一个根实例，在 ID 为 `app` 的 DOM 节点上渲染出上面定义的 App 组件。
 
-## 3.7.2 接入 Webpack
+## 2. 接入 Webpack
 
 目前最成熟和流行的开发 Vue 项目的方式是采用 ES6 加 Babel 转换，这和基本的采用 ES6 开发的项目很相似，差别在于要解析 `.vue` 格式的单文件组件。好在 Vue 官方提供了对应的 `vue-loader` (https://vue-loader.vuejs.org/zh-cn/)，可以非常方便地完成单文件组件的转换。
 
@@ -697,7 +693,7 @@ npm i -D vue-loader css-loader vue-template-compiler
 
 本实例提供项目的完整代码，参见 http://webpack.wuhaolin.cn/3-7 使用 Vue 框架 Babel.zip。
 
-## 3.7.3 使用 TypeScript 编写 Vue 应用
+## 3. 使用 TypeScript 编写 Vue 应用
 
 Vue 从 2.5.0 版本开始，就提供了对 TypeScript 的良好支持。使用 TypeScript 编写 Vue 是一个很好的选择，因为 TypeScript 能检查出一些潜在的错误。下面讲解如何用 Webpack 构建使用 TypeScript 编写的 Vue 应用。
 
@@ -796,7 +792,7 @@ npm i -D ts-loader typescript
 
 # 3.8 使用 Angular2 框架
 
-## 3.8.1 认识 Angular2
+## 1. 认识 Angular2
 
 Angular2 ([https://angular.io](https://angular.io/)) 是 AngularJS ([https://angularjs.org](https://angularjs.org/)) 的下一个版本，它继承了 AngularJS 中的部分思想，又加入了一些新的改进。与 React 和 Vue 相比，Angular2 要复杂得多，这三者的出发点都是组件化和数据驱动视图，但 Angular2 多出了以下概念。
 
@@ -882,7 +878,7 @@ npm i -S @angular/platform-browser-dynamic @angular/compiler
 
 以上是一个最小的能正常运行的 Angular2 应用，可见 Angular2 的依赖有很多，使用起来很复杂。
 
-## 3.8.2 接入 Webpack
+## 2. 接入 Webpack
 
 由于 Angular2 应用采用 TypeScript 开发，构建与在 3.2 节中讲过的类似，不同之处在于 `tsconfig.json` 配置。由于在 Angular2 项目中采用了注解的语法，而且 `@angular/platform-browser` 源码中有许多 DOM 操作，所以需要将配置修改如下：
 
@@ -912,7 +908,7 @@ npm i -S @angular/platform-browser-dynamic @angular/compiler
 
 # 3.9 为单页应用生成 HTML
 
-## 3.9.1 引入问题
+## 1. 引入问题
 
 在 3.6 节中是用最简单的 Hello, Webpack 作为例子让大家理解，在这个例子里因为只输出了一个 `bundle.js` 文件，所以手写了一个 `index.html` 文件去引入这个 `bundle.js`，才能让应用在浏览器中运行起来。
 
@@ -967,7 +963,7 @@ dist
 
 可以看到，部分代码被内嵌进了 HTML 的 HEAD 标签中，部分文件的名称被打上根据文件内容算出的 Hash 值，并且加载这些文件的 URL 地址也被正常注入 HTML 中了。如果我们还采用手写 `index.html` 文件去完成以上要求，就会使工作变得复杂、易错，项目难以维护。本节讲解如何自动化地生成这个符合要求的 `index.html`。
 
-## 3.9.2 解决方案
+## 2. 解决方案
 
 这里推荐一个用于方便解决以上问题的 Webpack 插件 `web-webpack-plugin` (https://github.com/gwuhaolin/web-webpack-plugin)。该插件已经被社区中的许多人使用和验证，解决了大家的痛点并获得了很多好评，下面具体介绍如何用它来解决上面的问题。
 
@@ -1104,7 +1100,7 @@ WebPlugin 插件还支持一些更高级的用法，若想了解具体内容，�
 
 # 3.10 管理多个单页应用
 
-## 3.10.1 引入问题
+## 1. 引入问题
 
 在 3.9 节中只生成了一个 HTML 文件，但在实际应用中一个完整的系统不会将所有功能都做到一个网页中，因为这会导致网页性能不佳。实际的做法是按照功能模块划分成多个单页应用，每个页面中生成一个 HTML 文件。并且随着业务的发展，更多的单页应用可能会被逐渐加入到项目中。
 
@@ -1186,7 +1182,7 @@ entry: {
 
 当有新页面加入时，就需要修改 Webpack 的配置文件，不断插入以上代码，这会导致构建代码难以维护且易错。
 
-## 3.10.2 解决方案
+## 2. 解决方案
 
 在 3.9 节中讲到的 `web-webpack-plugin` (https://github.com/gwuhaolin/web-webpack-plugin) 插件也内置了解决该问题的方法，在该节使用了它的 `WebPlugin`。本节将使用它的 `AutoWebPlugin` 来解决以上问题，使用起来非常简单，下面讲解具体用法。
 
@@ -1302,7 +1298,7 @@ module.exports = {
 
 同构应用是指写一份代码但可同时在浏览器和服务器中运行的应用。
 
-## 3.11.1 认识同构应用
+## 1. 认识同构应用
 
 现在大多数单页应用的视图都是通过 JavaScript 代码在浏览器端渲染出来的，但在浏览器端渲染的坏处如下。
 
@@ -1336,7 +1332,7 @@ module.exports = {
 
 # 3.15 搭配 Npm Script
 
-## 3.15.1 认识 Npm Script
+## 1. 认识 Npm Script
 
 Npm Script 是一个任务执行者。Npm 是在安装 Node.js 时附带的包管理器，Npm Script 则是 Npm 内置的一个功能，允许在 package.json 文件里使用 scripts 字段定义任务：
 
@@ -1375,7 +1371,7 @@ Npm Script 能方便地解决这个问题，只需要在 scripts 字段里定义
 
 Npm Script 会先去项目目录下的 node_modules 中寻找有没有可执行的 webpack 文件，如果有就使用本地的，如果没有就使用全局的。所以现在执行 Webpack 构建时，只需要通过执行 npm run build 实现。
 
-## 3.15.2 Webpack 为什么需要 Npm Script
+## 2. Webpack 为什么需要 Npm Script
 
 Webpack 只是一个打包模块化代码的工具，并没有提供任何任务管理相关的功能。但在实际场景中通常不会是只通过执行 webpack 就能完成所有任务的，而是需要多个任务才能完成。
 
@@ -1413,7 +1409,7 @@ Webpack 只是一个打包模块化代码的工具，并没有提供任何任务
 
 完全解决以上问题不是一件简单的事，但代码代检查能解决大部分问题。本节将讲解如何结合构建做代码检查。
 
-## 3.16.1 代码检查具体是做什么的
+## 1. 代码检查具体是做什么的
 
 检查代码和 Code Review 很相似，都是审视提交的代码可能存在的问题。但 Code Review 一般由人执行，而检查代码是通过机器执行一些自动化的检查。自动化地检查代码的成本更低，实施代价更小。
 
@@ -1426,7 +1422,7 @@ Webpack 只是一个打包模块化代码的工具，并没有提供任何任务
 
 目前已经有成熟的工具可以检验诸如 JavaScript、TypeScript、CSS、SCSS 等常用语言。
 
-## 3.16.2 怎么做代码检查
+## 2. 怎么做代码检查
 
 在做代码风格检查时需要按照不同的文件类型来检查，下面分别介绍。
 
@@ -1543,7 +1539,7 @@ stylelint 还有很多功能和配置项在这里没有介绍，可以访问其�
 
 目前有很多编辑器如 Webstorm、VSCode 等已经集成了以上介绍的检查工具，编辑器会将检查工具输出的错误实时地显示到编辑的源码上。通过编辑器集成后，不用通过命令行的方式去定位错误。
 
-## 3.16.3 结合 Webpack 检查代码
+## 3. 结合 Webpack 检查代码
 
 以上介绍的代码检查工具可以和 Webpack 结合，在开发过程中通过 Webpack 输出实时的检查结果。
 
@@ -1647,7 +1643,7 @@ Webpack 除了提供了可执行的命令行工具，还提供了可在 Node.js 
 
 Webpack 其实是一个 Node.js 应用程序，全部通过 JavaScript 开发完成。在命令行中执行 `webpack` 命令其实等价于执行 `node ./node_modules/webpack/bin/webpack.js`。
 
-## 3.17.1 安装和使用 Webpack 模块
+## 1. 安装和使用 Webpack 模块
 
 在调用 Webpack API 前，需要先安装它：
 
@@ -1685,7 +1681,7 @@ const config = require('./webpack.config.js');
 webpack(config, callback);
 ```
 
-## 3.17.2 以监听模式运行
+## 2. 以监听模式运行
 
 以上使用 Webpack API 的方法只能执行一次构建，无法以监听模式启动 Webpack，为了在使用 API 时以监听模式启动，则需要获取 Compiler 实例，方法如下：
 
@@ -1742,7 +1738,7 @@ app.listen(3000);
 - 接收来自 Webpack Compiler 实例输出的文件，但不会将文件输出到硬盘中，而会保存在内存中。
 - 在 Expressjs app 上注册路由，拦截 HTTP 收到的请求，根据请求路径响应对应的文件内容。
 
-## 3.18.1 Webpack Dev Middleware 支持的配置项
+## 1. Webpack Dev Middleware 支持的配置项
 
 在 Node.js 中调用 `webpack-dev-middleware` 提供的 API 时，还可以向它传入一些配置项，方法如下：
 
@@ -1795,7 +1791,7 @@ app.use(webpackMiddleware(compiler, {
 }));
 ```
 
-## 3.18.2 Webpack Dev Middleware 与模块热替换
+## 2. Webpack Dev Middleware 与模块热替换
 
 DevServer 提供了一个便捷的功能，可以做到在监听到文件发生变化时自动替换网页中的老模块，以做到实时预览。DevServer 虽然是基于 `webpack-dev-middleware` 实现的，但 `webpack-dev-middleware` 并没有实现模块热替换功能，而 DevServer 自己实现了该功能。
 
@@ -1875,7 +1871,7 @@ npm i -D webpack-dev-middleware webpack-hot-middleware express
 
 在网页中不可避免地会依赖图片资源，例如 PNG、JPG、GIF。下面讲解如何用 Webpack 加载图片资源。
 
-## 3.19.1 使用 file-loader
+## 1. 使用 file-loader
 
 file-loader（https://github.com/webpack-contrib/file-loader）可以将 JavaScript 和 CSS 中导入图片的语句替换成正确的地址，同时将文件输出到对应的位置。
 
@@ -1932,7 +1928,7 @@ module.exports = {
 
 本实例提供项目的完整代码，参见 http://webpack.wuhaolin.cn/3-19 加载图片 file-loader.zip。
 
-## 3.19.2 使用 url-loader
+## 2. 使用 url-loader
 
 url-loader（https://github.com/webpack-contrib/url-loader）可以将文件的内容经过 base64 编码后注入 JavaScript 或者 CSS 中。
 
@@ -2030,7 +2026,7 @@ module.exports = {
 
 由于 SVG 是文本格式的文件，所以除了有以上两种方法，还有其他方法，下面一一说明。
 
-## 3.20.1 使用 raw-loader
+## 1. 使用 raw-loader
 
 raw-loader（https://github.com/webpack-contrib/raw-loader）可以将文本文件的内容读取出来，注入 JavaScript 或 CSS 中。
 
@@ -2072,7 +2068,7 @@ module.exports = {
 
 本实例提供项目的完整代码，参见 http://webpack.wuhaolin.cn/3-20 加载 SVG-raw-loader.zip。
 
-## 3.20.2 使用 svg-inline-loader
+## 2. 使用 svg-inline-loader
 
 svg-inline-loader（https://github.com/webpack-contrib/svg-inline-loader）和上面提到的 raw-loader 非常相似，不同之处在于 svg-inline-loader 会分析 SVG 的内容，去除其中不必要的部分代码，以减小 SVG 的文件大小。
 
@@ -2135,7 +2131,7 @@ Webpack 支持为转换生成的代码输出对应的 Source Map 文件，以方
 - cheap：在生成的 Source Map 中不会包含列信息，这样计算量更小，输出的 Source Map 文件更小；同时 Loader 输出的 Source Map 不会被采用。
 - module：来自 Loader 的 Source Map 被简单处理成每行一个模块。
 
-## 3.21.1 该如何选择
+## 1. 该如何选择
 
 Devtool 配置项提供的这么多选项看似简单，却让很多人弄不明白它们之间的差别和应用场景。如果不关心细节和性能，只是想在不出任何差错的情况下调试源码，则可以直接设置成 source-map，但这样会造成以下两个问题。
 
@@ -2151,7 +2147,7 @@ Devtool 配置项提供的这么多选项看似简单，却让很多人弄不明
 
 不要在生产环境下使用 inline 模式的 Source Map，因为这会使 JavaScript 文件变得很大，而且会泄露源码。
 
-## 3.21.2 加载现有的 Source Map
+## 2. 加载现有的 Source Map
 
 某些从 Npm 安装的第三方模块是采用 ES6 或者 TypeScript 编写的，它们在发布时会同时带上编译出来的 JavaScript 文件和对应的 Source Map 文件，以方便我们在使用它们出问题时进行调试。
 
