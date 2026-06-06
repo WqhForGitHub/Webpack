@@ -1,0 +1,206 @@
+{
+  "main": {
+    "id": "1a15457492d6bbde",
+    "type": "split",
+    "children": [
+      {
+        "id": "75f4faf74514bd6b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6b708ace2e3abfd2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "05. Loader/5.18 thread-loader.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "5.18 thread-loader"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "b64d55555d68f50c",
+    "type": "split",
+    "children": [
+      {
+        "id": "6dddd14cf04f6281",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a32ebc2103a55e93",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "d160123b01cf37d8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "ff28d17eb0c38f71",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "2c56adc432599cf6",
+    "type": "split",
+    "children": [
+      {
+        "id": "7c88d6d5e5932af9",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3769781f012ed4de",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "05. Loader/5.18 thread-loader.md",
+                "collapseAll": false,
+                "extraContext": true,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "5.18 thread-loader 的反向链接列表"
+            }
+          },
+          {
+            "id": "1bb4c9aef56cdfba",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "05. Loader/5.18 thread-loader.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "5.18 thread-loader 的出链列表"
+            }
+          },
+          {
+            "id": "9a4bf37bad9d3936",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "331438cc1771b481",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "90ca208eb65dd84d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "05. Loader/5.18 thread-loader.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "5.18 thread-loader 的大纲"
+            }
+          }
+        ],
+        "currentTab": 4
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "6b708ace2e3abfd2",
+  "lastOpenFiles": [
+    "05. Loader/5.16 style-loader.md",
+    "05. Loader/5.18 thread-loader.md",
+    "05. Loader/5.14 sass-loader.md",
+    "05. Loader/5.9 less-loader.md",
+    "05. Loader/5.3 css-loader.md",
+    "05. Loader/5.2 babel-loader.md",
+    "02. 概念/2.5 plugin/README.md",
+    "05. Loader",
+    "03. 配置",
+    "02. 概念/2.4 loader/README.md",
+    "02. 概念/2.5 plugin",
+    "02. 概念/2.2 入口起点/README.md",
+    "02. 概念/2.4 loader",
+    "02. 概念/2.3 输出/README.md",
+    "02. 概念/2.1 概念/README.md",
+    "02. 概念/2.3 输出"
+  ]
+}
