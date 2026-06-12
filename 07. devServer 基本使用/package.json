@@ -1,0 +1,16 @@
+{
+  "name": "webpack-devserver-basic-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 演示 webpack-dev-server 基本使用：本地服务、自动刷新、代理、静态资源、压缩等",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.0"
+  }
+}

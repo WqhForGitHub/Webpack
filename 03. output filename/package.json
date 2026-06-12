@@ -1,0 +1,16 @@
+{
+  "name": "webpack-output-filename",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现 output filename 各种占位符 demo",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "build:hash": "webpack --config webpack.hash.config.js",
+    "build:contenthash": "webpack --config webpack.contenthash.config.js",
+    "build:chunkhash": "webpack --config webpack.chunkhash.config.js"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

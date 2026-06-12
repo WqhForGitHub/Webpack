@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- 通过 htmlWebpackPlugin.options 拿到每个实例的配置 -->
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
+    <header>
+      <a href="index.html">首页</a> |
+      <a href="about.html">关于</a>
+    </header>
+    <main id="app">
+      <h1><%= htmlWebpackPlugin.options.title %></h1>
+    </main>
+    <!-- script 标签由 html-webpack-plugin 自动注入 -->
+  </body>
+</html>

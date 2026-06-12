@@ -1,0 +1,16 @@
+{
+  "name": "webpack-mode-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现 mode（development vs production）对比 demo",
+  "private": true,
+  "scripts": {
+    "build:dev": "webpack --config webpack.dev.config.js",
+    "build:prod": "webpack --config webpack.prod.config.js",
+    "build:none": "webpack --config webpack.none.config.js",
+    "build:all": "npm run build:dev && npm run build:prod && npm run build:none"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

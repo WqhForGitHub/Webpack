@@ -1,0 +1,16 @@
+{
+  "name": "webpack-loader-pitch-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 演示自定义 loader 的执行顺序（pitch 阶段 + normal 阶段）",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.0"
+  }
+}

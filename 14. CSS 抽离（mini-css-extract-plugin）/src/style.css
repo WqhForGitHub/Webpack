@@ -1,0 +1,26 @@
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #f0f4ff, #fff7e6);
+  color: #333;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 720px;
+  margin: 60px auto;
+  padding: 32px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.title {
+  color: #722ed1;
+  margin-top: 0;
+}
+
+.desc {
+  color: #555;
+  line-height: 1.7;
+}

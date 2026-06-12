@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+#app {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.title {
+  color: #1677ff;
+  margin-top: 0;
+}
+
+.desc {
+  color: #555;
+  line-height: 1.7;
+}
+
+.btn {
+  padding: 8px 18px;
+  background: #1677ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #4096ff;
+}

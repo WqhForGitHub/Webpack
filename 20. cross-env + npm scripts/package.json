@@ -1,0 +1,19 @@
+{
+  "name": "webpack-cross-env-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 演示通过 cross-env 跨平台设置环境变量并配合 npm scripts",
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=development APP_ENV=local webpack serve --mode development",
+    "build:dev": "cross-env NODE_ENV=development APP_ENV=dev webpack --mode development",
+    "build:test": "cross-env NODE_ENV=production APP_ENV=test webpack --mode production",
+    "build": "cross-env NODE_ENV=production APP_ENV=prod webpack --mode production"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.0"
+  }
+}

@@ -1,0 +1,46 @@
+/* 故意写一些注释和多余空白，便于观察压缩前后差异 */
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+#app {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* 标题 */
+.title {
+  color: #1677ff;
+  font-size: 28px;
+  margin-top: 0;
+}
+
+.desc {
+  color: #555555;
+  line-height: 1.7;
+}
+
+.card {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #eeeeee;
+  border-radius: 6px;
+}
+
+.card-title {
+  font-weight: 600;
+  color: #333333;
+}
+
+.card-content {
+  margin-top: 8px;
+  color: #666666;
+}

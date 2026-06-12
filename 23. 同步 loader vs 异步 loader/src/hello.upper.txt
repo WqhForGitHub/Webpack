@@ -1,0 +1,1 @@
+hello sync loader, this text will be uppercased.

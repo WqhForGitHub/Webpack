@@ -1,0 +1,24 @@
+{
+  "name": "webpack-devtool-compare-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack devtool 各种模式对比实验：体积、构建速度、调试体验",
+  "private": true,
+  "scripts": {
+    "build": "node ./scripts/compare.js",
+    "build:eval": "webpack --env devtool=eval --output-path dist/eval",
+    "build:source-map": "webpack --env devtool=source-map --output-path dist/source-map",
+    "build:eval-source-map": "webpack --env devtool=eval-source-map --output-path dist/eval-source-map",
+    "build:eval-cheap-source-map": "webpack --env devtool=eval-cheap-source-map --output-path dist/eval-cheap-source-map",
+    "build:eval-cheap-module-source-map": "webpack --env devtool=eval-cheap-module-source-map --output-path dist/eval-cheap-module-source-map",
+    "build:cheap-source-map": "webpack --env devtool=cheap-source-map --output-path dist/cheap-source-map",
+    "build:cheap-module-source-map": "webpack --env devtool=cheap-module-source-map --output-path dist/cheap-module-source-map",
+    "build:inline-source-map": "webpack --env devtool=inline-source-map --output-path dist/inline-source-map",
+    "build:hidden-source-map": "webpack --env devtool=hidden-source-map --output-path dist/hidden-source-map",
+    "build:nosources-source-map": "webpack --env devtool=nosources-source-map --output-path dist/nosources-source-map",
+    "build:none": "webpack --env devtool=false --output-path dist/none"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

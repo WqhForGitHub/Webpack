@@ -1,0 +1,35 @@
+/* src/style.css —— 通过 @font-face 引入字体文件，webpack 会把 url() 解析为 asset 输出 */
+
+@font-face {
+  font-family: "MyCustomFont";
+  /* 优先 woff2，其次 woff，最后 ttf；浏览器自动选择支持的格式 */
+  src:
+    url("./fonts/MyFont.woff2") format("woff2"),
+    url("./fonts/MyFont.woff") format("woff"),
+    url("./fonts/MyFont.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "MyIconFont";
+  src: url("./fonts/MyIconFont.ttf") format("truetype");
+}
+
+body {
+  font-family: system-ui, sans-serif;
+  padding: 24px;
+}
+
+.custom-font {
+  font-family: "MyCustomFont", system-ui, sans-serif;
+  font-size: 28px;
+}
+
+.icon {
+  font-family: "MyIconFont";
+  font-style: normal;
+  font-size: 48px;
+  color: #e74c3c;
+}

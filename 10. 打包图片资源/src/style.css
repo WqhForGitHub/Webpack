@@ -1,0 +1,21 @@
+/* src/style.css —— 通过 url() 引入图片 */
+body {
+  font-family: system-ui, sans-serif;
+  padding: 24px;
+}
+
+img {
+  max-width: 200px;
+  display: block;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+}
+
+.bg-box {
+  width: 200px;
+  height: 120px;
+  border: 1px solid #ccc;
+  background-image: url("./images/big.png");
+  background-size: cover;
+  background-position: center;
+}
