@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Webpack 图片懒加载 Demo</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+      h1 {
+        text-align: center;
+        padding: 20px;
+        background: #333;
+        color: #fff;
+      }
+      .placeholder {
+        margin: 50px auto;
+        width: 80%;
+        height: 400px;
+        background: linear-gradient(135deg, #eee, #ccc);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        color: #666;
+        border-radius: 8px;
+      }
+      .placeholder.loaded {
+        background: none;
+      }
+      .placeholder img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 8px;
+      }
+      .tips {
+        text-align: center;
+        color: #999;
+        margin: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>图片懒加载 Demo（向下滚动）</h1>
+    <p class="tips">打开 DevTools → Network，观察图片 chunk 在滚动到视口时才加载</p>
+    <div class="placeholder" data-img="img1">图片 1（滚动到视口加载）</div>
+    <div class="placeholder" data-img="img2">图片 2（滚动到视口加载）</div>
+    <div class="placeholder" data-img="img3">图片 3（滚动到视口加载）</div>
+    <div class="placeholder" data-img="img4">图片 4（滚动到视口加载）</div>
+  </body>
+</html>

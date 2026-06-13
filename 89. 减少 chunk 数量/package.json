@@ -1,0 +1,16 @@
+{
+  "name": "webpack-reduce-chunks",
+  "version": "1.0.0",
+  "description": "纯 webpack 减少 chunk 数量 demo（LimitChunkCountPlugin / MinChunkSizePlugin / merge）",
+  "private": true,
+  "scripts": {
+    "build:default": "webpack --config webpack.default.js",
+    "build:limit": "webpack --config webpack.limit.js",
+    "build:min": "webpack --config webpack.min.js",
+    "build:all": "npm run build:default && npm run build:limit && npm run build:min"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

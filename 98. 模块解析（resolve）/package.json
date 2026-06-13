@@ -1,0 +1,14 @@
+{
+  "name": "webpack-resolve-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack demo：模块解析（resolve）原理与配置",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "trace": "node trace-resolve.js"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

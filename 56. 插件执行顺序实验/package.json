@@ -1,0 +1,13 @@
+{
+  "name": "webpack-plugin-execution-order-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现 插件执行顺序实验 demo",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

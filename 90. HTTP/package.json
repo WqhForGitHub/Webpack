@@ -1,0 +1,17 @@
+{
+  "name": "webpack-http-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现 HTTP demo（fetch/axios + devServer proxy + HTTPS）",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "serve": "webpack serve --open",
+    "serve:https": "webpack serve --open --server-type https"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  }
+}

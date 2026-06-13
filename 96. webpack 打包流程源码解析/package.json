@@ -1,0 +1,13 @@
+{
+  "name": "webpack-pack-flow-trace",
+  "version": "1.0.0",
+  "description": "纯 webpack demo：webpack 打包流程源码解析（hooks 全链路追踪）",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

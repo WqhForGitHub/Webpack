@@ -1,0 +1,15 @@
+{
+  "name": "webpack-resolve-options",
+  "version": "1.0.0",
+  "description": "纯 webpack demo：alias、extensions、mainFields 配置对比",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "build:no-alias": "webpack --env mode=no-alias",
+    "build:cjs": "webpack --env mode=cjs"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

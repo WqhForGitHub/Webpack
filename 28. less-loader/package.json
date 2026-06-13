@@ -1,0 +1,20 @@
+{
+  "name": "webpack-less-loader-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 使用 less-loader 编译 LESS",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.6.0",
+    "less": "^4.2.0",
+    "less-loader": "^12.2.0",
+    "style-loader": "^3.3.4",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.0"
+  }
+}

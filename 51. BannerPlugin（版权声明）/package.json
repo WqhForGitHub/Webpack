@@ -1,0 +1,14 @@
+{
+  "name": "webpack-banner-plugin-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack BannerPlugin（版权声明） demo",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "build:prod": "webpack --mode production"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

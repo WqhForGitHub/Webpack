@@ -1,0 +1,15 @@
+{
+  "name": "webpack-mini",
+  "version": "1.0.0",
+  "description": "纯 webpack demo：手写简易 webpack（mini-pack）",
+  "private": true,
+  "scripts": {
+    "build": "node mini-pack/cli.js",
+    "build:webpack": "webpack",
+    "run:dist": "node dist/bundle.js"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "webpack-plugin-perf-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现 插件性能影响分析 demo",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "build:nofast": "cross-env FAST=0 webpack",
+    "build:fast": "cross-env FAST=1 webpack"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

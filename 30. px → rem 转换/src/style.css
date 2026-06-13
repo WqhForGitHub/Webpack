@@ -1,0 +1,24 @@
+/* 这里全部使用 px，构建时会被 postcss-pxtorem 自动换算成 rem
+ * rootValue = 75
+ *   150px -> 2rem
+ *   75px  -> 1rem
+ *   1px   -> 不变（minPixelValue=2）
+ */
+.title {
+  font-size: 36px;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.box {
+  width: 300px;
+  height: 150px;
+  border: 1px solid #ddd; /* 1px 不会被转 */
+  background: #4f8cff;
+  color: #fff;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}

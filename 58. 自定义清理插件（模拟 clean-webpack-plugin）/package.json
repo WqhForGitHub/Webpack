@@ -1,0 +1,13 @@
+{
+  "name": "webpack-custom-clean-plugin-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 自定义清理插件（模拟 clean-webpack-plugin）",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

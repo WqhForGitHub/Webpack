@@ -1,0 +1,18 @@
+{
+  "name": "webpack-minify-comparison",
+  "version": "1.0.0",
+  "description": "纯 webpack 代码压缩对比 demo（development vs production vs terser custom）",
+  "private": true,
+  "scripts": {
+    "build:none": "webpack --config webpack.none.js",
+    "build:dev": "webpack --config webpack.dev.js",
+    "build:prod": "webpack --config webpack.prod.js",
+    "build:terser": "webpack --config webpack.terser.js",
+    "build:all": "npm run build:none && npm run build:dev && npm run build:prod && npm run build:terser"
+  },
+  "devDependencies": {
+    "terser-webpack-plugin": "^5.3.10",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

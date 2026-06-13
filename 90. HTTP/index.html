@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Webpack HTTP Demo</title>
+    <style>
+      body { font-family: sans-serif; padding: 20px; }
+      button { margin: 5px; padding: 8px 16px; cursor: pointer; }
+      pre { background: #f4f4f4; padding: 10px; max-height: 400px; overflow: auto; }
+    </style>
+  </head>
+  <body>
+    <h1>Webpack + HTTP 演示</h1>
+    <button id="btn-fetch">fetch 直连</button>
+    <button id="btn-proxy">fetch 经 devServer proxy</button>
+    <button id="btn-mock">访问 mock 接口</button>
+    <pre id="output">点击按钮发起请求...</pre>
+  </body>
+</html>

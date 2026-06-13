@@ -1,0 +1,14 @@
+{
+  "name": "webpack-multi-html-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现 多 HTML 页面生成 demo",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

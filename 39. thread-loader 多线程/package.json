@@ -1,0 +1,20 @@
+{
+  "name": "webpack-thread-loader-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现 thread-loader 多线程：把 babel-loader 放到 worker 池中执行",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "babel-loader": "^9.1.3",
+    "html-webpack-plugin": "^5.6.0",
+    "thread-loader": "^4.0.4",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.0"
+  }
+}

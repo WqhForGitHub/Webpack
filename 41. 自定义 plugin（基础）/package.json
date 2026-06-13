@@ -1,0 +1,16 @@
+{
+  "name": "webpack-custom-plugin-basic-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 自定义 plugin（基础）：通过 apply + tap 生成构建清单文件",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.0"
+  }
+}

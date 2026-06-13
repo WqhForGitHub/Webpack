@@ -1,0 +1,16 @@
+{
+  "name": "webpack-side-effects-optimization",
+  "version": "1.0.0",
+  "description": "纯 webpack sideEffects 优化效果 demo",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "build:on": "webpack --config webpack.on.js",
+    "build:off": "webpack --config webpack.off.js",
+    "build:all": "npm run build:on && npm run build:off"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

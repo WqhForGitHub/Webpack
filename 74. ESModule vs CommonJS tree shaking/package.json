@@ -1,0 +1,16 @@
+{
+  "name": "webpack-esm-vs-cjs-tree-shaking",
+  "version": "1.0.0",
+  "description": "纯 webpack 对比 ESModule vs CommonJS 的 tree shaking 表现",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "build": "webpack",
+    "build:esm": "webpack --env target=esm",
+    "build:cjs": "webpack --env target=cjs"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

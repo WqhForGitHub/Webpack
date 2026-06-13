@@ -1,0 +1,19 @@
+{
+  "name": "webpack-hmr-from-scratch",
+  "version": "1.0.0",
+  "description": "纯 webpack HMR 原理实现（手写简化版）—— 不依赖 webpack-dev-server，自己用 ws + chokidar 实现",
+  "private": true,
+  "scripts": {
+    "build": "webpack --watch",
+    "serve": "node ./server/index.js",
+    "dev": "node ./scripts/dev.js"
+  },
+  "devDependencies": {
+    "chokidar": "^3.6.0",
+    "express": "^4.19.2",
+    "html-webpack-plugin": "^5.6.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "ws": "^8.17.0"
+  }
+}

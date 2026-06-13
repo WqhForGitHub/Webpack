@@ -1,0 +1,21 @@
+{
+  "name": "webpack-dll-plugin-demo",
+  "version": "1.0.0",
+  "description": "纯 webpack 演示 DLLPlugin（历史方案）",
+  "private": true,
+  "scripts": {
+    "build:dll": "webpack --config webpack.dll.config.js",
+    "build": "webpack --config webpack.config.js",
+    "build:all": "npm run build:dll && npm run build"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "html-webpack-plugin": "^5.6.0",
+    "add-asset-html-webpack-plugin": "^6.0.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "jquery": "^3.7.1"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "demo-app",
+  "version": "1.0.0",
+  "short_name": "demo",
+  "description": "示例 PWA manifest，由 CopyWebpackPlugin 直接拷贝到 dist"
+}

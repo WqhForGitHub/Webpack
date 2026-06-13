@@ -1,0 +1,12 @@
+name: webpack-yaml-demo
+version: 1.0.0
+author:
+  name: demo
+  email: demo@example.com
+features:
+  - yaml-loader
+  - js-yaml
+  - webpack5
+config:
+  port: 8106
+  hot: true

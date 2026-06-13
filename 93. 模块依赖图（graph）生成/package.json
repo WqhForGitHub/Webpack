@@ -1,0 +1,13 @@
+{
+  "name": "webpack-module-graph",
+  "version": "1.0.0",
+  "description": "纯 webpack 实现：模块依赖图（graph）生成 demo",
+  "private": true,
+  "scripts": {
+    "build": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

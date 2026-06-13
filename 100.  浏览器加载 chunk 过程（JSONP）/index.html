@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JSONP chunk loading</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      pre {
+        background: #f6f6f6;
+        padding: 10px;
+        border-radius: 4px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>浏览器加载 chunk 过程（JSONP）</h1>
+    <p>
+      打开 DevTools 的 <b>Network</b> 与 <b>Console</b> 面板，再点击下面的按钮。<br />
+      你会看到浏览器通过插入
+      <code>&lt;script src="async-feature.chunk.js"&gt;</code>
+      的方式异步加载 chunk。
+    </p>
+    <button id="btn">点我加载异步 chunk</button>
+
+    <h3>JSONP 流程</h3>
+    <pre>
+1. 调用 import('./async-feature')
+2. webpack runtime: __webpack_require__.e(chunkId)
+3. 创建 &lt;script src="/dist/async-feature.chunk.js"&gt; 插入 head
+4. chunk 文件内容：
+   (self["myJsonp"] = self["myJsonp"] || []).push([
+     [chunkId],
+     { "./src/async-feature.js": (m, e, r) => { ... } }
+   ]);
+5. runtime 监听 myJsonp.push -&gt; 注册 modules -&gt; resolve Promise
+6. import() 的 .then(mod =&gt; ...) 拿到模块导出</pre>
+
+    <!-- 注意：webpack 5 + runtimeChunk: 'single' 时，runtime 必须先于 bundle 加载 -->
+    <script src="/dist/runtime.bundle.js"></script>
+    <script src="/dist/main.bundle.js"></script>
+  </body>
+</html>

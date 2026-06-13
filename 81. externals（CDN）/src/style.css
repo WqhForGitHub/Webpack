@@ -1,0 +1,10 @@
+/* src/style.css */
+body {
+  font-family: -apple-system, system-ui, sans-serif;
+  background: #fafafa;
+  margin: 0;
+  padding: 24px;
+}
+.title {
+  color: #1976d2;
+}

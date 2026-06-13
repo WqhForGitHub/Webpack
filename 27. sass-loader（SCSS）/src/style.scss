@@ -1,0 +1,31 @@
+// 变量
+$primary: #4f8cff;
+$radius: 8px;
+
+// mixin
+@mixin card($bg) {
+  background: $bg;
+  border-radius: $radius;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  color: $primary;
+  font-size: 24px;
+
+  // 嵌套
+  &::after {
+    content: " (SCSS)";
+    color: lighten($primary, 20%);
+  }
+}
+
+.card {
+  @include card(#f6f8fb);
+  margin-top: 12px;
+
+  .desc {
+    color: #555;
+  }
+}

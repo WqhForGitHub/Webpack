@@ -1,0 +1,14 @@
+{
+  "name": "webpack-loader-runner-mock",
+  "version": "1.0.0",
+  "description": "纯 webpack demo：loader-runner 模拟",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "demo": "node loader-runner-mini/demo.js"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

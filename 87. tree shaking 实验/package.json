@@ -1,0 +1,17 @@
+{
+  "name": "webpack-tree-shaking-experiment",
+  "version": "1.0.0",
+  "description": "纯 webpack tree shaking 实验 demo（usedExports 标记 + minimize 删除）",
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "build:dev": "webpack --config webpack.dev.js",
+    "build:used": "webpack --config webpack.used.js",
+    "build:full": "webpack --config webpack.full.js",
+    "build:all": "npm run build:dev && npm run build:used && npm run build:full"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

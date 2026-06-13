@@ -1,0 +1,3 @@
+Hello, raw-loader!
+这是一段纯文本内容。
+第三行：webpack 会把它当成字符串原样导入。

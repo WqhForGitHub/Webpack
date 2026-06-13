@@ -1,0 +1,16 @@
+{
+  "name": "webpack-runtime-analysis",
+  "version": "1.0.0",
+  "description": "纯 webpack runtime 分析 demo —— 阅读 __webpack_require__ 等运行时代码",
+  "private": true,
+  "scripts": {
+    "build:single": "webpack --config webpack.single.js",
+    "build:async": "webpack --config webpack.async.js",
+    "build:split": "webpack --config webpack.split.js",
+    "build:all": "npm run build:single && npm run build:async && npm run build:split"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

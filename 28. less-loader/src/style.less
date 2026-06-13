@@ -1,0 +1,31 @@
+// LESS 变量
+@primary: #ff7043;
+@radius: 6px;
+
+// LESS mixin
+.card-base(@bg) {
+  background: @bg;
+  border-radius: @radius;
+  padding: 16px;
+  border: 1px solid darken(@bg, 8%);
+}
+
+.title {
+  color: @primary;
+  font-size: 24px;
+
+  // 嵌套
+  &::after {
+    content: " (LESS)";
+    color: lighten(@primary, 20%);
+  }
+}
+
+.box {
+  .card-base(#fff7f3);
+  margin-top: 12px;
+
+  .desc {
+    color: #555;
+  }
+}

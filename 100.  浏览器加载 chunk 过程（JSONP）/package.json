@@ -1,0 +1,14 @@
+{
+  "name": "webpack-jsonp-chunk-loading",
+  "version": "1.0.0",
+  "description": "纯 webpack demo：浏览器加载 chunk 过程（JSONP）",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "serve": "node server.js"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

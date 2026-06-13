@@ -1,0 +1,14 @@
+{
+  "name": "webpack-tapable-mini",
+  "version": "1.0.0",
+  "description": "纯 webpack demo：tapable 原理（简化实现）",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "demo": "node tapable-mini/demo.js"
+  },
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
